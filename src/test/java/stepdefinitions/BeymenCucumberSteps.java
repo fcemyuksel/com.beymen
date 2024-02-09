@@ -32,24 +32,27 @@ public class BeymenCucumberSteps {
     public DataOutputAsStream workbook;
     String input1;
 
-
+        //www.beymen.com sitesi açılır.
     @Given("beymen sitesi açılır.")
     public void beymen_sitesi_açılır() {
         Driver.getDriver().get(ConfigReader.getProperty("beymenUrl"));
+        //acilan cerez sayfasi kapatilir
         beymenPage.cerezElementi.click();
+        //acilan cinsiyet secimi kapatilir
         beymenPage.cinsiyetElementi.click();
 
     }
-
+        //Ana sayfanın açıldığı kontrol edilir.
     @Then("Ana sayfanın açıldığı kontrol edilir.")
     public void ana_sayfanın_açıldığı_kontrol_edilir() {
         Assert.assertTrue(beymenPage.hesabimElementi.isDisplayed());
         beymenPage.headerElementi.click();
 
     }
-
+        //Arama kutucuğuna “şort” kelimesi girilir(xlsx dosyasindan)
     @When("Arama kutucuğuna “şort” kelimesi girilir.")
     public void arama_kutucuğuna_şort_kelimesi_girilir() throws InterruptedException {
+        //dosya yolundan istenen kelime cekilir
         String dosyaYolu = "src/test/java/utilities/Beymen.xlsx";
         FileInputStream fileInputStream;
         try {
@@ -57,6 +60,7 @@ public class BeymenCucumberSteps {
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
+        //WorkbookFactory sınıfı, Excel dosyalarını açmak ve oluşturmak için kullanılır
         Workbook workbook;
         try {
             workbook = WorkbookFactory.create(fileInputStream);
@@ -71,13 +75,13 @@ public class BeymenCucumberSteps {
         Thread.sleep(2000);
 
     }
-
+        //Arama kutucuğuna girilen “şort” kelimesi silinir
     @Then("Arama kutucuğuna girilen “şort” kelimesi silinir.")
     public void arama_kutucuğuna_girilen_şort_kelimesi_silinir() {
         beymenPage.searchElementi.clear();
 
     }
-
+        //Arama kutucuğuna “gömlek” kelimesi girilir (xlsx dosyasindan)
     @Then("Arama kutucuğuna “gömlek” kelimesi girilir.")
     public void arama_kutucuğuna_gömlek_kelimesi_girilir() {
         Row row = sayfa1.getRow(0);
@@ -85,27 +89,37 @@ public class BeymenCucumberSteps {
         beymenPage.searchElementi.sendKeys(cell.getStringCellValue());
 
     }
-
+        //Klavye uzerinden enter tusuna basilir
     @Then("Klavye üzerinden “enter” tuşuna bastırılır")
     public void klavye_üzerinden_enter_tuşuna_bastırılır() {
         beymenPage.searchElementi.sendKeys(Keys.ENTER);
 
     }
 
+    /*
+    OZELLIKLE TESTIN YAZILDIGI ZAMAN BEYMEN.COM AKTIF BIR SITE OLDUGU ICIN
+    URUNLERDE ADET VE BEDEN SIKINTISI YASANIYORDU. BU NEDENLE BEDEN VE ADET ICIN
+    EK KOD BLOGU ACMAK ZORUNDA KALDIM
+     */
+
+    //Sonuca gore sergilenen urunlerden rastgele bir urun secilir
     @Then("Sonuca göre sergilenen ürünlerden rastgele bir ürün seçilir.")
     public void sonuca_göre_sergilenen_ürünlerden_rastgele_bir_ürün_seçilir() {
         // Rastgele bir ürün seç
-        System.out.println(beymenPage.productList.size());
+
         int randomIndex = random.nextInt(beymenPage.productList.size());
+        // Bu satır, Random sınıfını kullanarak rastgele bir indeks seçer
         WebElement selectedProduct = beymenPage.productList.get(randomIndex);
+        //Bu satır, rastgele seçilen indeksteki ürünü alır
 
         // Seçilen ürünü tıkla
         selectedProduct.click();
 
-        boolean control = true;
-        int index = 0;
+        boolean control = true;  //control değişkeni, bir bedenin seçilip seçilmediğini kontrol etmek için kullanılır
+        int index = 0;           //index değişkeni, beden listesindeki indeksi takip etmek için kullanılır.
         if (beymenPage.bedenElementi.size() > 0) {
             while (control) {
+                //beden aktifse, control değişkeni false olarak ayarlanır ve döngü sona erer.
                 WebElement secilenBeden = beymenPage.bedenElementi.get(index);
                 String classValue = secilenBeden.getAttribute("class");
                 if (!classValue.contains("disabled")) {
@@ -114,17 +128,18 @@ public class BeymenCucumberSteps {
             }
 
             beymenPage.bedenElementi.get(index).click();
+            //uygun bedeni bulduktan sonra, bu bedenin üzerine tıklamak için kullanılır.
         } else {
              index = 0;
+             //listesi boşsa index sıfırlanır ve kritikBedenlerListesi listesinden ilk öğe seçilir
             beymenPage.kritikBedenlerListesi.get(index).click();
         }
     }
-
+        //Seçilen ürünün ürün bilgisi ve tutar bilgisi txt dosyasına yazılır
     @Then("Seçilen ürünün ürün bilgisi ve tutar bilgisi txt dosyasına yazılır.")
     public void seçilen_ürünün_ürün_bilgisi_ve_tutar_bilgisi_txt_dosyasına_yazılır() {
         input1 = beymenPage.secilenUrunFiyat.getText();
-        System.out.println(beymenPage.secilenUrunBilgisi.getText());
-        System.out.println(beymenPage.secilenUrunFiyat.getText());
+
         String metin = beymenPage.secilenUrunBilgisi.getText();
         String metin1=beymenPage.secilenUrunFiyat.getText();
 
@@ -154,35 +169,36 @@ public class BeymenCucumberSteps {
         }
 
     }
-
+        //Seçilen ürün sepete eklenir
     @Then("Seçilen ürün sepete eklenir.")
     public void seçilen_ürün_sepete_eklenir() {
         beymenPage.sepeteEkleElementi.click();
+        //Sepetim elementine tiklanir
         beymenPage.sepetimElementi.click();
 
     }
-
+        //Ürün sayfasındaki fiyat ile sepette yer alan ürün fiyatının doğruluğu karşılaştırılır
     @Then("Ürün sayfasındaki fiyat ile sepette yer alan ürün fiyatının doğruluğu karşılaştırılır.")
     public void ürün_sayfasındaki_fiyat_ile_sepette_yer_alan_ürün_fiyatının_doğruluğu_karşılaştırılır() {
 
         String input2 = beymenPage.sepettekiUrunElementi.getText();
 
 
-        System.out.println(input1);
-        System.out.println(input2);
+        //her iki tutardan rakam harici karakterler cikarilir
         String sadeceSayilar1= input1.replaceAll("\\D","");
         String sadeceSayilar2= input2.replaceAll("\\D","");
 
+        //sadece sayilardan olusan karakterler tutarlara atanir
         int tutar1 = Integer.parseInt(sadeceSayilar1);
+        //sepetteki tutar sonuna otomatik olarak iki adet sifir ekliyordu. /100 yaparak onu sildim
         int tutar2 = Integer.parseInt(sadeceSayilar2)/100;
-        System.out.println(tutar1);
-        System.out.println(tutar2);
+        //her iki tutarin ayni olduğu karsilastirilir
         Assert.assertEquals(tutar2,tutar1);
 
     }
-
-    @Then("Adet arttırılarak ürün adedinin {int} olduğu doğrulanır.")
-    public void adet_arttırılarak_ürün_adedinin_olduğu_doğrulanır(Integer int1) {
+        //Adet arttırılarak ürün adedinin 2 olduğu doğrulanır
+    @Then("Adet arttırılarak ürün adedinin 2 olduğu doğrulanır.")
+    public void adet_arttırılarak_ürün_adedinin_olduğu_doğrulanır() {
         beymenPage.dropdownMenu.click();
         Select select=new Select(beymenPage.dropdownMenu);
 

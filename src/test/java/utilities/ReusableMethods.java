@@ -31,7 +31,7 @@ public class ReusableMethods {
             }
         }
 
-    Workbook workbook;
+    Workbook workbook; //obje olusturma
 
     {
         try {
