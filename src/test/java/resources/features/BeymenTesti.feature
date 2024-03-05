@@ -1,7 +1,7 @@
 
 
 Feature: US01 Beymen Testi
-
+  @wip
 
   Scenario: Kullanici beymen sayfasinda arama yapabilmeli
 

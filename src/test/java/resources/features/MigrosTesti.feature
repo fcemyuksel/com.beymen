@@ -1,5 +1,5 @@
 Feature: US01 Migros Testi
-  @wip
+
 
   Scenario: Migros sayfasinda alisveris yapar
 
