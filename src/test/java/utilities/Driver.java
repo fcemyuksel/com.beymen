@@ -19,7 +19,7 @@ public class Driver {
     public static WebDriver getDriver(){
 
         String browser=ConfigReader.getProperty("browser");
-        WebDriverManager.chromedriver().setup();
+        //WebDriverManager.chromedriver().setup();
 
 
         if (driver==null) {
