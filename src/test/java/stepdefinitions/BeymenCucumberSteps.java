@@ -126,7 +126,6 @@ public class BeymenCucumberSteps {
                     control = false;
                 }
             }
-
             beymenPage.bedenElementi.get(index).click();
             //uygun bedeni bulduktan sonra, bu bedenin üzerine tıklamak için kullanılır.
         } else {
