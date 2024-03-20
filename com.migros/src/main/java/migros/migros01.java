@@ -30,7 +30,7 @@ public class migros01 {
 
         //www.migros.com.tr'ye git
         driver.get("https://www.migros.com.tr/");
-
+        Thread.sleep(1500);
         //cerezleri reddet
         driver.findElement(By.xpath("//*[text()='Tümünü Reddet']")).click();
 
@@ -65,23 +65,23 @@ public class migros01 {
         // Evet, Adresim Doğru secenegini tikla
         driver.findElement(By.xpath("//*[text()=' Evet, Adresim Doğru ']")).click();
         Thread.sleep(1500);
-
+/*
         actions.keyDown(Keys.PAGE_DOWN)
                 .keyDown(Keys.PAGE_DOWN)
                 .perform();
 
-
+*/
         List<WebElement> kategorilerElementiList = driver.findElements(By.xpath("//div[@class='main-category-tabs']"));
         for (int i = 0; i < kategorilerElementiList.size(); i++) {
             System.out.println(i + 1 + "-) " + kategorilerElementiList.get(i).getText());
         }
-
+        System.out.println("****************************************************************************");
 
         //et balik tikla
         Thread.sleep(1500);
         WebElement etBalikElementi = driver.findElement(By.xpath("//span[@class='subtitle-2 text-color-black' and text()='Et & Tavuk & Balık']"));
         jse.executeScript("arguments[0].scrollIntoView();", etBalikElementi);
-        Thread.sleep(1500);
+        Thread.sleep(2500);
         etBalikElementi.click();
         Thread.sleep(2500);
         actions.keyDown(Keys.END).perform();
@@ -90,7 +90,7 @@ public class migros01 {
 
         Thread.sleep(1500);
 
-        //System.out.println(randomUrunSecici);
+        System.out.println(randomUrunSecici);
         //Thread.sleep(1500);
         //System.out.println(urunlerElementiList.size());
         while (secilenUrunler.size() < urunlerElementiList.size()) {
@@ -104,16 +104,18 @@ public class migros01 {
                 String dinamikXpath = "(//*[@class='ng-fa-icon add-to-cart-button ng-star-inserted'])[" + (randomUrunSecici + 1) + "]";
                 try {
                 WebElement product = urunElementListItem.findElement(By.xpath(dinamikXpath));
-                Thread.sleep(2000);
+
                 jse.executeScript("arguments[0].click();", product);
                 System.out.println("Seçilen Ürün: " + urunAdi);
+                Thread.sleep(1000);
 
                 } catch (NoSuchElementException e) {
 
                     System.out.println("Hata: Element bulunamadı");
                     e.printStackTrace();
                 }
-                Thread.sleep(2000);
+
+
                 //driver.close();
             }
         }
